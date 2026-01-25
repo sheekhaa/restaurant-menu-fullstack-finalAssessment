@@ -1,6 +1,9 @@
 <?php
-require '../includes/functions.php';
+session_start();
 require "../config/db.php";
+if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
+    die("Access denied");
+}
 
 if (!isset($_GET['id'])) {
     die("Category ID missing");

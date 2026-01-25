@@ -23,51 +23,49 @@ if (!empty($cart)) {
 <html>
 <head>
     <title>Cart</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link rel="stylesheet" href="../assets/waiter_css/style.css">
 </head>
 <body>
+    <div class="category-container">
+        <table class="category-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Price</th>
+                    <th>Qty</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
 
-<div class="category-container">
-<table class="category-table">
-    <thead>
+        <?php foreach ($items as $item): 
+            $qty = $cart[$item['id']];
+            $subtotal = $item['price'] * $qty;
+            $total += $subtotal;
+        ?>
         <tr>
-            <th>Item</th>
-            <th>Price</th>
-            <th>Qty</th>
-            <th>Subtotal</th>
+            <td><?= htmlspecialchars($item['name']) ?></td>
+            <td>Rs <?= number_format($item['price'],2) ?></td>
+            <td><?= $qty ?></td>
+            <td>Rs <?= number_format($subtotal,2) ?></td>
         </tr>
-    </thead>
-    <tbody>
+        <?php endforeach; ?>
 
-<?php foreach ($items as $item): 
-    $qty = $cart[$item['id']];
-    $subtotal = $item['price'] * $qty;
-    $total += $subtotal;
-?>
-<tr>
-    <td><?= htmlspecialchars($item['name']) ?></td>
-    <td>Rs <?= number_format($item['price'],2) ?></td>
-    <td><?= $qty ?></td>
-    <td>Rs <?= number_format($subtotal,2) ?></td>
-</tr>
-<?php endforeach; ?>
+        <tr>
+            <th colspan="3">Total</th>
+            <th>Rs <?= number_format($total,2) ?></th>
+        </tr>
+            </tbody>
+        </table>
 
-<tr>
-    <th colspan="3">Total</th>
-    <th>Rs <?= number_format($total,2) ?></th>
-</tr>
-    </tbody>
-</table>
-
-<div style="text-align:center; margin-top:20px;">
-    <?php if (!empty($items)): ?>
-        <form method="POST" action="place_order.php">
-            <button type="submit" class="btn">Place Order</button>
-        </form>
-    <?php endif; ?>
-</div>
-
-</div>
+        <div style="text-align:center; margin-top:20px;">
+            <?php if (!empty($items)): ?>
+                <form method="POST" action="place_order.php">
+                    <button type="submit" class="place-order">Place Order</button>
+                </form>
+            <?php endif; ?>
+        </div>
+    </div>
 
 </body>
 </html>

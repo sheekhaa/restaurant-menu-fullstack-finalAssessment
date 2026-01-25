@@ -8,7 +8,7 @@
 <body>
 	<div>
 		<header class="header-content">
-		    <p class="logo">Waiter Dashboard</p>
+		    <a href="waiter_dashboard.php" class="logo">Waiter Dashboard</a>
 		    <nav class="nav-content">
 		        <a href="menu_list.php">Menu</a>
 		        <a href="cart.php">Cart</a>

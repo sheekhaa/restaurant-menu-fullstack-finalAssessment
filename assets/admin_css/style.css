@@ -45,7 +45,8 @@ h3{
     cursor: pointer;
     border: 1px solid black;
     border-radius: 8px;
-    background: #A5C89E;
+    background: #4A61A1
+;
 }
 
 /*admin dashboard*/
@@ -54,13 +55,15 @@ h3{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #97A87A;
+    background: #1E3A8A;
 }
 
 .logo{
     font-family: cursive;
+    text-decoration: none;
     font-size: 22px;
     cursor: pointer;
+    color: white;
 }
 
 .nav-content{
@@ -70,7 +73,7 @@ h3{
 
 .nav-content a{
     text-decoration: none;
-    color: black;
+    color: white;
     font-size: 16px;
     transition: all 0.3s ease;
 }
@@ -86,9 +89,10 @@ h3{
 /*footer*/
 .footer{
 	text-align: center;
-	background: #97A87A;
+	background: #1E3A8A;
 	padding: 10px;
 	margin-top: 20px;
+    color: white;
 }
 
 .footer-text{
@@ -96,7 +100,6 @@ h3{
 }
 
 /*waiter login*/
-
 .waiter-form{
     width: 400px;
     margin: 50px auto;
@@ -133,8 +136,8 @@ h3{
     border-radius: 6px;
     color: black;
 }
-/*category*/
 
+/*category*/
 .category-form{
     width: 400px;
     margin: 50px auto;
@@ -172,7 +175,7 @@ h3{
     cursor: pointer;
     border: 1px solid black;
     border-radius: 8px;
-    background: #A5C89E;
+    background: #4A61A1;
 }
 
 /*categories table*/
@@ -199,7 +202,7 @@ h3{
 .category-table th {
     padding: 12px 20px;
     text-align: left;
-    background-color: #1e293b;
+    background-color: #1E3A8A;;
     color: #fff;
     font-weight: 600;
     font-size: 14px;
@@ -278,7 +281,7 @@ h3{
     cursor: pointer;
     border: 1px solid black;
     border-radius: 8px;
-    background: #A5C89E;
+    background: #4A61A1;
 }
 
 /*add menu*/
@@ -319,12 +322,10 @@ h3{
     cursor: pointer;
     border: 1px solid black;
     border-radius: 8px;
-    background: #A5C89E;
+    background: #4A61A1;
 }
-/*add to cart*/
 
-.add-to-cart{
-    text-decoration: none;
-    font-size: 16px;
-    color: #2563eb;
+.edit-btn{
+    text-decoration: none;    
 }
+

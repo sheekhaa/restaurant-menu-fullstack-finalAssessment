@@ -1,9 +1,62 @@
 <?php
-require '../includes/functions.php';
+session_start();
+require "../includes/functions.php";
 require "../config/db.php";
 $message = "";
+if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
+    die("Access denied");
+}
 
-// Fetch categories for dropdown
+// AJAX search handler
+if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
+    $params = [];
+    $where = [];
+
+    // Search by item name
+    if (!empty($_GET['search'])) {
+        $where[] = "menu_items.name LIKE :search";
+        $params[':search'] = "%" . $_GET['search'] . "%";
+    }
+
+    // Filter by category if sent
+    if (!empty($_GET['category_id'])) {
+        $where[] = "menu_items.category_id = :category_id";
+        $params[':category_id'] = $_GET['category_id'];
+    }
+
+    $whereSQL = "";
+    if (!empty($where)) {
+        $whereSQL = "WHERE " . implode(" AND ", $where);
+    }
+
+    $sql = "SELECT menu_items.*, categories.name AS category_name
+            FROM menu_items
+            JOIN categories ON menu_items.category_id = categories.id
+            $whereSQL
+            ORDER BY menu_items.id ASC";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    // Return only table rows
+    foreach ($menuItems as $item) {
+        echo "<tr>
+            <td>{$item['id']}</td>
+            <td>" . htmlspecialchars($item['category_name']) . "</td>
+            <td>" . htmlspecialchars($item['name']) . "</td>
+            <td>Rs " . number_format($item['price'], 2) . "</td>
+            <td>" . ucfirst($item['availability']) . "</td>
+            <td class='action-icons'>
+                <a href='edit_menu_item.php?id={$item['id']}' class='edit-btn'>Edit</a>
+                <a href='delete_menu_item.php?id={$item['id']}' class='delete-btn' onclick='return confirm(\"Delete this item?\");'>Delete</a>
+            </td>
+        </tr>";
+    }
+    exit; // Stop full page from rendering
+}
+
+// Fetch categories 
 $sql = "SELECT * FROM categories ORDER BY name ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
@@ -11,6 +64,9 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Add menu item
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+        die("Invalid CSRF token");
+    }
     $name = $_POST['name'];
     $category_id = $_POST['category_id'];
     $price = $_POST['price'];
@@ -29,15 +85,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $message = "Menu item added successfully";
 }
 
-// Fetch menu items with category name
+// Fetch menu items with category name (initial page load or GET search)
+$where = [];
+$params = [];
+
+// search by item name
+if (!empty($_GET['search'])) {
+    $where[] = "menu_items.name LIKE :search";
+    $params[':search'] = "%" . $_GET['search'] . "%";
+}
+
+// Filter by category if selected
+if (!empty($_GET['category_id'])) {
+    $where[] = "menu_items.category_id = :category_id";
+    $params[':category_id'] = $_GET['category_id'];
+}
+
+$whereSQL = "";
+if (!empty($where)) {
+    $whereSQL = "WHERE " . implode(" AND ", $where);
+}
+
 $sql = "SELECT menu_items.*, categories.name AS category_name
         FROM menu_items
         JOIN categories ON menu_items.category_id = categories.id
+        $whereSQL
         ORDER BY menu_items.id ASC";
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 require '../includes/header.php';
 ?>
@@ -47,15 +124,16 @@ require '../includes/header.php';
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../assets/admin_css/style.css">
     <title>Add Menu</title>
 </head>
 <body>
-    
+<div style="flex: 1;">
     <form method="post" class="add-menu-form">
+        <input type="hidden" name="csrf_token" value="<?= generateCSRFToken(); ?>">
         <h2 style="font-size: 16px; margin-bottom: 10px;">Add Menu Item</h2>
         <div class="add-menu-details">
-        <label>Category:</label>
+            <label>Category:</label>
             <select name="category_id" required>
                 <option value="">Select Category</option>
                 <?php foreach ($categories as $cat): ?>
@@ -74,7 +152,7 @@ require '../includes/header.php';
             <input type="number" step="0.01" name="price" required>
         </div>
         <div class="add-menu-details">
-        <label>Availability:</label>
+            <label>Availability:</label>
             <select name="availability" required>
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
@@ -88,14 +166,22 @@ require '../includes/header.php';
             <p style="color:green; text-align:center; margin-top: 10px;"><?= $message ?></p>
         <?php endif; ?>
     </form>
-    <div class="back-dashboard">
-        <a href="admin_dashboard.php">Back to Dashboard</a>
-    </div>
 
-    <div class="category-container">   
+    <div class="category-container">
+    <!-- Search input and button -->
+    <form id="adminSearchForm" style="margin-bottom: 10px;" onsubmit="return false;">
+        <input 
+            type="text" 
+            id="adminSearchInput"
+            placeholder="Search menu item..." 
+            value="<?= htmlspecialchars($_GET['search'] ?? '') ?>"
+            style="outline: none; border: 1px solid black; border-radius: 8px; padding: 6px; width: 250px;"
+        >
+        <button class="btn" type="submit">Search</button>
+    </form>
 
     <table class="category-table">
-         <h3 style="font-size: 16px; margin-bottom: 10px;" class="category-heading">All Menu Items</h3>
+        <h3 style="font-size: 16px; margin-bottom: 10px;" class="category-heading">All Menu Items</h3>
         <thead>
             <tr>
                 <th>ID</th>
@@ -106,7 +192,7 @@ require '../includes/header.php';
                 <th>Action</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody id="menuTableBody">
             <?php foreach ($menuItems as $item): ?>
             <tr>
                 <td><?= $item['id'] ?></td>
@@ -124,9 +210,27 @@ require '../includes/header.php';
         </tbody>
     </table>
 </div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("adminSearchInput");
+    const searchForm = document.getElementById("adminSearchForm");
+    const tableBody = document.getElementById("menuTableBody");
 
+    function fetchMenu() {
+        const searchValue = searchInput.value;
 
+        fetch(`add_menu.php?ajax=1&search=${encodeURIComponent(searchValue)}`)
+            .then(response => response.text())
+            .then(data => {
+                tableBody.innerHTML = data;
+            })
+            .catch(err => console.error(err));
+    }
+
+    // AJAX on button click
+    searchForm.addEventListener("submit", fetchMenu);
+});
+</script>
+<?php require '../includes/footer.php'; ?>
 </body>
 </html>
-
-<?php require '../includes/footer.php'; ?>

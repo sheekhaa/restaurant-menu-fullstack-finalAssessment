@@ -1,7 +1,6 @@
 <?php
+session_start();
 require "../config/db.php";
-require '../includes/functions.php';
-
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
     die("Access denied");
 }
@@ -17,6 +16,15 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 require '../includes/header.php';
 ?>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../assets/admin_css/style.css">
+</head>
+<body>
 
 <h2 style="text-align:center; margin-top:20px;">All Orders</h2>
 
@@ -80,8 +88,11 @@ require '../includes/header.php';
     </tbody>
 </table>
 
-<div style="text-align:center; margin:20px;">
+<!-- <div style="text-align:center; margin:20px;">
     <a href="admin_dashboard.php">Back to Dashboard</a>
-</div>
+</div> -->
+
+</body>
+</html>
 
 <?php require '../includes/footer.php'; ?>

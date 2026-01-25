@@ -4,12 +4,12 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Header</title>
-	<link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+	<link rel="stylesheet" type="text/css" href="../assets/admin_css/style.css">
 </head>
 <body>
 <div>
     <header class="header-content">
-    <p class="logo">Admin Dashboard</p>
+    <a href="admin_dashboard.php" class="logo">Admin Dashboard</a>
     <nav class="nav-content">
         <a href="create_waiter.php">Create Waiter Account</a>
         <a href="categories.php">Categories</a>

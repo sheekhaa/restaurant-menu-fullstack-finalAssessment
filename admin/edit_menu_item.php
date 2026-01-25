@@ -1,6 +1,9 @@
 <?php
-require '../includes/functions.php';
+session_start();
 require "../config/db.php";
+if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
+    die("Access denied");
+}
 
 if (!isset($_GET['id'])) {
     die("Menu item ID missing");
@@ -63,12 +66,12 @@ require '../includes/header.php';
 <head>
     <meta charset="utf-8">
     <title>Edit Menu Item</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../assets/admin_css/style.css">
 </head>
 <body>
 
 <form method="post" class="edit-form">
-    <h2 style="font-size:16px;">Edit Menu Item</h2>
+    <h2 style="font-size:16px; margin-bottom: 10px;">Edit Menu Item</h2>
 
     <div class="edit-details">
         <label>Category:</label>
@@ -109,9 +112,9 @@ require '../includes/header.php';
     <?php endif; ?>
 </form>
 
-<div class="back-dashboard">
+<!-- <div class="back-dashboard">
     <a href="add_menu.php">Back</a>
-</div>
+</div> -->
 
 </body>
 </html>

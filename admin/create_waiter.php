@@ -1,9 +1,16 @@
 <?php
-require '../includes/functions.php';
+session_start();
+require "../includes/functions.php";
 require "../config/db.php";
 $message = "";
+if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
+    die("Access denied");
+}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
+        die("Invalid CSRF token");
+    }
     $username = $_POST['username'];
     $password = md5($_POST['password']);
     $role = 'waiter';
@@ -36,12 +43,13 @@ require '../includes/header.php';
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>LogIn Page</title>
-    <link rel="stylesheet" type="text/css" href="../assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="../assets/admin_css/style.css">
 
 </head>
 <body>      
 
     <form class="waiter-form" method="post">
+        <input type="hidden" name="csrf_token" value="<?= generateCSRFToken(); ?>">
         <h2 style="font-size: 16px; margin-bottom: 10px;">Create Waiter Account</h2>  
         <div class="waiter-details">
             <label>Username:</label>
@@ -80,9 +88,9 @@ require '../includes/header.php';
         </table>
     </div>
 
-    <div class="back-dashboard">
+<!--     <div class="back-dashboard">
         <a href="admin_dashboard.php">Back to Dashboard</a>
-    </div>
+    </div> -->
 </body>
 </html>
 

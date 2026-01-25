@@ -18,8 +18,17 @@ $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 require '../includes/header.php';
 ?>
 
-<h2 style="text-align:center; margin-top:20px;">All Orders</h2>
-
+<<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Orders</title>
+    <link rel="stylesheet" type="text/css" href="../assets/admin_css/style.css">
+</head>
+<body>
+    <div style="flex: 1;">
+    <h2 style="text-align:center; margin-top:20px;">All Orders</h2>
 <?php if (isset($_SESSION['flash_message'])): ?>
     <p style="color:green; text-align:center; font-weight:bold;">
         <?= $_SESSION['flash_message'] ?>
@@ -80,8 +89,12 @@ require '../includes/header.php';
     </tbody>
 </table>
 
-<div style="text-align:center; margin:20px;">
+<!-- <div style="text-align:center; margin:20px;">
     <a href="admin_dashboard.php">Back to Dashboard</a>
-</div>
-
+</div> -->
 <?php require '../includes/footer.php'; ?>
+</div>
+</body>
+</html>
+
+

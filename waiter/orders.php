@@ -12,8 +12,18 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute([':waiter_id' => $_SESSION['user_id']]);
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-require '../includes/header.php';
+require '../includes/waiter_header.php';
 ?>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="../assets/waiter_css/style.css">
+</head>
+<body>
 
 <h2 style="text-align:center; margin-top:20px;">Your Orders</h2>
 
@@ -75,8 +85,10 @@ require '../includes/header.php';
     </tbody>
 </table>
 
-<div style="text-align:center; margin:20px;">
+<!-- <div style="text-align:center; margin:20px;">
     <a href="menu_list.php">Back to Menu</a>
-</div>
+</div> -->
+</body>
+</html>
 
 <?php require '../includes/footer.php'; ?>

@@ -1,7 +1,12 @@
-<?php
-session_start();
+<?php 
+function generateCSRFToken() {
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
 
-if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
-    die("Access denied");
+function verifyCSRFToken($token) {
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
 }
 ?>
