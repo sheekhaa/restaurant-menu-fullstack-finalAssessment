@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
 </head>
 <body>
 <form method="POST" class="admin-form">
-    <h3>Admin Login</h3>    
+    <h3>Login</h3>    
 
     <div class="admin-details">
         <label>Username:</label>

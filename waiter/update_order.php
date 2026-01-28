@@ -28,6 +28,6 @@ $sqlUpdate = "UPDATE orders SET status = :status WHERE id = :id";
 $stmtUpdate = $pdo->prepare($sqlUpdate);
 $stmtUpdate->execute([':status' => $status, ':id' => $order_id]);
 
-$_SESSION['flash_message'] = "Order #$order_id status updated to $status ";
+$_SESSION['flash_message'] = "Order $order_id status updated to $status ";
 header("Location: orders.php");
 exit;

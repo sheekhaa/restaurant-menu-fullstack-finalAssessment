@@ -66,6 +66,6 @@ if (!empty($cart)) {
             <?php endif; ?>
         </div>
     </div>
-
+    <?php require '../includes/footer.php'; ?> 
 </body>
 </html>

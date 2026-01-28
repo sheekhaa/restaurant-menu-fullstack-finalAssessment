@@ -3,6 +3,65 @@
     padding: 0;
     font-family: Arial, Helvetica, sans-serif;
 }
+/*waiter dashboard*/
+.welcome{
+    margin: 20px;
+    text-align: center;
+}
+.dashboard-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.card{
+    background: white;
+    border-radius: 10px;
+    border: 1px solid black;
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.card:hover{
+    transform: translateY(-5px);
+}
+
+.card img{
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+}
+.card h3{
+    margin: 10px 0;
+    color: #555;
+}
+.card p{
+    color: #777;
+    font-size: 14px;
+}
+
+.info-section{
+    margin-top: 50px;
+    text-align: center;
+}
+
+.info-section img{
+    width: 300px;
+    height: 300px;
+    border-radius: 10px;
+}
+.info-section p{
+    font-size: 16px;
+    color: #555;
+    margin-top: 15px;
+}
+/*waiter form */
 h3{
     margin-bottom: 10px;
     font-size: 18px;
@@ -51,6 +110,8 @@ h3{
     padding: 10px;
     margin-top: 20px;
     color: white;
+    position: fixed;
+    bottom: 0;
 }
 
 .footer-text{
@@ -137,4 +198,117 @@ h3{
 
 .edit-btn{
     text-decoration: none;    
+}
+
+
+   /*RESPONSIVE DESIGN */
+
+/* Tablets */
+@media (max-width: 992px) {
+
+    .category-table {
+        width: 95%;
+    }
+
+    .dashboard-container {
+        gap: 15px;
+    }
+
+    .card {
+        width: 220px;
+    }
+
+    .info-section img {
+        width: 250px;
+        height: 250px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+
+    /*  navbar*/
+    .header-content {
+        flex-direction: column;
+        align-items: center;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .logo {
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+
+    .nav-content {
+        width: 100%;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .nav-content a {
+        width: 100%;
+        padding: 8px 0;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .nav-content a:hover {
+        transform: none;
+    }
+
+    /* table */
+    .category-container {
+        padding: 10px;
+        overflow-x: auto;
+    }
+
+    .category-table {
+        width: 100%;
+        font-size: 13px;
+    }
+
+    .action-icons {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    /* dashboard cards*/
+    .card {
+        width: 100%;
+        max-width: 320px;
+    }
+
+    .info-section img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* button */
+    .place-order {
+        width: 100%;
+    }
+
+    /* footer */
+    .footer {
+        position: static;
+    }
+}
+
+/* Small phones */
+@media (max-width: 480px) {
+
+    h2, h3 {
+        font-size: 16px;
+    }
+
+    .card img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .place-order {
+        width: 100%;
+    }
 }

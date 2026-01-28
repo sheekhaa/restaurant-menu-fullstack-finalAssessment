@@ -168,17 +168,14 @@ require '../includes/header.php';
     </form>
 
     <div class="category-container">
-    <!-- Search input and button -->
-    <form id="adminSearchForm" style="margin-bottom: 10px;" onsubmit="return false;">
+    <!-- Search input -->
         <input 
             type="text" 
             id="adminSearchInput"
             placeholder="Search menu item..." 
             value="<?= htmlspecialchars($_GET['search'] ?? '') ?>"
-            style="outline: none; border: 1px solid black; border-radius: 8px; padding: 6px; width: 250px;"
+            style="outline: none; border: 1px solid black; border-radius: 8px; padding: 6px; width: 250px; margin-bottom: 15px;"
         >
-        <button class="btn" type="submit">Search</button>
-    </form>
 
     <table class="category-table">
         <h3 style="font-size: 16px; margin-bottom: 10px;" class="category-heading">All Menu Items</h3>
@@ -213,12 +210,11 @@ require '../includes/header.php';
 <script>
 document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.getElementById("adminSearchInput");
-    const searchForm = document.getElementById("adminSearchForm");
     const tableBody = document.getElementById("menuTableBody");
 
-    function fetchMenu() {
-        const searchValue = searchInput.value;
+    let debounceTimer;
 
+    function fetchMenu(searchValue) {
         fetch(`add_menu.php?ajax=1&search=${encodeURIComponent(searchValue)}`)
             .then(response => response.text())
             .then(data => {
@@ -227,10 +223,17 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => console.error(err));
     }
 
-    // AJAX on button click
-    searchForm.addEventListener("submit", fetchMenu);
+    // Live search while typing
+    searchInput.addEventListener("input", () => {
+        clearTimeout(debounceTimer);
+
+        debounceTimer = setTimeout(() => {
+            fetchMenu(searchInput.value);
+        }, 300); // 300ms debounce
+    });
 });
 </script>
+
 <?php require '../includes/footer.php'; ?>
 </body>
 </html>
