@@ -1,8 +1,9 @@
 <?php
+// Database connection using PDO with error handling
 $host = "localhost";
-$dbname = "restaurant_system";
-$username = "root";
-$password = "";
+$dbname = "np03cs4a240329";
+$username = "np03cs4a240329";
+$password = "fpSPYznoyt";
 
 try {
     $pdo = new PDO(
@@ -10,7 +11,7 @@ try {
         $username,
         $password
     );
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);// Enable exceptions for errors
 } catch (PDOException $e) {
     die("Database connection failed");
 }

@@ -3,16 +3,20 @@ session_start();
 require '../includes/functions.php';
 require "../config/db.php";
 $message = "";
+// Check if user is logged in and is admin
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
     die("Access denied");
 }
 
-
+// Handle category creation form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verify CSRF token for security
         if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
         die("Invalid CSRF token");
     }
+    // Get category name from form
     $name = $_POST['name'];
+    // Insert new category into database
     $sql = "INSERT INTO categories (name) VALUES (:name)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
@@ -70,6 +74,7 @@ require '../includes/header.php';
                 <?php foreach ($categories as $cat): ?>
                 <tr class="category-row"> 
                     <td><?= $cat['id'] ?></td>
+                    <!-- Escape output to prevent XSS -->
                     <td><?= htmlspecialchars($cat['name']) ?></td>  
                      <td class="action-icons">
                         <a href="edit_category.php?id=<?= $cat['id'] ?>" class="edit-btn">Edit</a>

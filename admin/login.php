@@ -1,28 +1,35 @@
 <?php 
+// Start session to manage login state
 session_start();
 require "../config/db.php";
-
+// Variable to store login error message
 $error = "";
 
+// Check if form is submitted
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
+
+    // Get form input values
     $username = $_POST['username'];
     $password = $_POST['password'];
     $role = $_POST['role'];
 
+    // Fetch user based on username and role
     $sql = "SELECT * FROM users WHERE username = :username AND role = :role";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
         ':username' => $username,
         ':role' => $role
     ]);
-
+    // Fetch user data
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    // Verify password using MD5 hash
     if ($user && md5($password) === $user['password']) {
+        // Set session variables after successful login
         $_SESSION['logged_in'] = true;
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = $user['role'];
 
+        // Redirect user based on role
         if ($role == 'admin') {
             header("Location: admin_dashboard.php");
         } else {

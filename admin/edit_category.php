@@ -4,7 +4,7 @@ require "../config/db.php";
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
     die("Access denied");
 }
-
+// Ensure category ID is provided
 if (!isset($_GET['id'])) {
     die("Category ID missing");
 }
@@ -22,7 +22,7 @@ if (!$category) {
     die("Category not found");
 }
 
-// Update category
+// Update category form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $sql = "UPDATE categories SET name = :name WHERE id = :id";

@@ -2,15 +2,15 @@
 require '../includes/waiter_header.php';
 session_start();
 require "../config/db.php";
-
+// Only allow waiter
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'waiter') {
     die("Access denied");
 }
-
+// Get current cart from session
 $cart = $_SESSION['cart'] ?? [];
-$total = 0;
+$total = 0;// Total amount
 $items = [];
-
+// Fetch menu item details from database if cart is not empty
 if (!empty($cart)) {
     $ids = implode(",", array_keys($cart));
     $sql = "SELECT * FROM menu_items WHERE id IN ($ids)";

@@ -7,18 +7,17 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'waiter') {
     die("Access denied");
 }
 
-// AJAX FILTER 
-
+// AJAX request to filter menu items by category
 if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
 
     $params = [];
     $where = "";
-
+    // If a category is selected, add WHERE clause
     if (!empty($_GET['category_id'])) {
         $where = "WHERE menu_items.category_id = :category_id";
         $params[':category_id'] = $_GET['category_id'];
     }
-
+    // Fetch menu items with category names
     $sql = "SELECT menu_items.*, categories.name AS category_name
             FROM menu_items
             JOIN categories ON menu_items.category_id = categories.id
@@ -28,7 +27,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
     $menuItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    // Output table rows dynamically
     foreach ($menuItems as $item) {
         echo "<tr>
             <td>{$item['id']}</td>

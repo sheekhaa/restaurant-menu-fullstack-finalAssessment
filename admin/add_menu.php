@@ -3,6 +3,7 @@ session_start();
 require "../includes/functions.php";
 require "../config/db.php";
 $message = "";
+// Restrict access to admin only
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
     die("Access denied");
 }
@@ -18,7 +19,7 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
         $params[':search'] = "%" . $_GET['search'] . "%";
     }
 
-    // Filter by category if sent
+    // Filter by category 
     if (!empty($_GET['category_id'])) {
         $where[] = "menu_items.category_id = :category_id";
         $params[':category_id'] = $_GET['category_id'];
@@ -56,13 +57,13 @@ if (isset($_GET['ajax']) && $_GET['ajax'] == '1') {
     exit; // Stop full page from rendering
 }
 
-// Fetch categories 
+// Fetch all categories for dropdown
 $sql = "SELECT * FROM categories ORDER BY name ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Add menu item
+// Handle adding new menu item
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
         die("Invalid CSRF token");

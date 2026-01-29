@@ -1,11 +1,12 @@
 <?php
 session_start();
 require "../config/db.php";
-
+// Restrict access to admin users
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
     die("Access denied");
 }
 
+// Validate GET parameters
 if (!isset($_GET['id'], $_GET['status'])) {
     die("Invalid request");
 }
@@ -27,7 +28,7 @@ $stmt->execute([
     ':id' => $orderId
 ]);
 
-// Flash message
+// Flash message for feedback
 $_SESSION['flash_message'] = "Order status updated successfully";
 
 header("Location: admin_orders.php");

@@ -1,10 +1,11 @@
 <?php
 session_start();
 require "../config/db.php";
+// Restrict access to admin users only
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
     die("Access denied");
 }
-
+// Check if menu item ID is provided via GET
 if (!isset($_GET['id'])) {
     die("Menu item ID missing");
 }
@@ -28,13 +29,13 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Update menu item
+// Handle form submission for updating menu item
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $category_id = $_POST['category_id'];
     $price = $_POST['price'];
     $availability = $_POST['availability'];
-
+    // Update menu item in database
     $sql = "UPDATE menu_items 
             SET category_id = :category_id,
                 name = :name,

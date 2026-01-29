@@ -13,6 +13,7 @@ $sql = "SELECT orders.*, users.username AS waiter_name
         ORDER BY created_at DESC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
+// Store all orders in an array
 $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 require '../includes/header.php';

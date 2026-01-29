@@ -7,14 +7,16 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
     die("Access denied");
 }
 
+// Handle creating a new waiter account
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if (!verifyCSRFToken($_POST['csrf_token'] ?? '')) {
         die("Invalid CSRF token");
     }
     $username = $_POST['username'];
-    $password = md5($_POST['password']);
+    $password = md5($_POST['password']);// store hashed password
     $role = 'waiter';
-
+    
+     // Insert new waiter account into users table
     $sql = "INSERT INTO users (username, password, role)
             VALUES (:username, :password, :role)";
     $stmt = $pdo->prepare($sql);
@@ -27,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $message = "Waiter account created successfully";
 }
 
-
+// Fetch all waiter accounts
 $sql = "SELECT id, username FROM users WHERE role = 'waiter' ORDER BY id ASC";
 $stmt = $pdo->prepare($sql);
 $stmt->execute();

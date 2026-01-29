@@ -5,7 +5,7 @@ require "../config/db.php";
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'waiter') {
     die("Access denied");
 }
-
+// Get cart
 $cart = $_SESSION['cart'] ?? [];
 
 if (empty($cart)) {

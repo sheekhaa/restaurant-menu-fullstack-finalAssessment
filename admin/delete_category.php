@@ -4,7 +4,7 @@ require "../config/db.php";
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
     die("Access denied");
 }
-
+// Ensure category ID is provided
 if (!isset($_GET['id'])) {
     die("Category ID missing");
 }

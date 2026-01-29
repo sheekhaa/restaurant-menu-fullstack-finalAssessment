@@ -1,6 +1,7 @@
 <?php
 session_start();
 require '../includes/header.php';
+// Check if user is logged in and is admin
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] != 'admin') {
     die("Access denied");
 }
